@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bistro Wallet</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff}
+   .bg-bistro{background:#00a86b}
+   .text-bistro{color:#00a86b}
+   .card{background:#121212}
+   .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-200%);background:#222;padding:12px 20px;border-radius:12px;transition:.3s;z-index:999}
+   .toast.show{transform:translateX(-50%) translateY(0)}
+    #app{max-width:480px;margin:0 auto;min-height:100vh}
+</style>
+</head>
+<body>
+<div id="app">
+    <!-- HEADER -->
+    <div class="p-5 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-bistro rounded-xl flex items-center justify-center font-black text-xl text-black">₦</div>
+            <div>
+                <p class="text-xs text-gray-400">Welcome back</p>
+                <h1 class="font-bold text-lg">Bistro Wallet</h1>
+            </div>
+        </div>
+        <i class="fas fa-bell text-xl cursor-pointer" onclick="toast('Notifications')"></i>
+    </div>
+
+    <!-- BALANCE CARD -->
+    <div class="mx-4 bg-bistro rounded-2xl p-5 text-black">
+        <p class="text-sm font-medium">Total Balance</p>
+        <h2 class="text-3xl font-extrabold my-2" id="balance">₦1,250,000.00</h2>
+        <div class="grid grid-cols-3 gap-3 mt-4">
+            <button onclick="openModal('fund')" class="bg-black/20 backdrop-blur py-3 rounded-xl font-semibold text-sm text-white"> <i class="fas fa-plus"></i><br>Fund</button>
+            <button onclick="openModal('send')" class="bg-black/20 backdrop-blur py-3 rounded-xl font-semibold text-sm text-white"> <i class="fas fa-paper-plane"></i><br>Send</button>
+            <button onclick="openModal('withdraw')" class="bg-black/20 backdrop-blur py-3 rounded-xl font-semibold text-sm text-white"> <i class="fas fa-wallet"></i><br>Withdraw</button>
+        </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="mx-4 mt-5">
+        <h3 class="font-bold mb-3">Quick Actions</h3>
+        <div class="grid grid-cols-4 gap-4 text-center">
+            <div onclick="toast('Airtime')" class="cursor-pointer"><div class="w-12 h-12 card rounded-xl flex items-center justify-center mx-auto mb-1"><i class="fas fa-mobile text-bistro"></i></div><p class="text-xs">Airtime</p></div>
+            <div onclick="toast('Data')" class="cursor-pointer"><div class="w-12 h-12 card rounded-xl flex items-center justify-center mx-auto mb-1"><i class="fas fa-wifi text-bistro"></i></div><p class="text-xs">Data</p></div>
+            <div onclick="toast('Electricity')" class="cursor-pointer"><div class="w-12 h-12 card rounded-xl flex items-center justify-center mx-auto mb-1"><i class="fas fa-bolt text-bistro"></i></div><p class="text-xs">Light</p></div>
+            <div onclick="toast('TV')" class="cursor-pointer"><div class="w-12 h-12 card rounded-xl flex items-center justify-center mx-auto mb-1"><i class="fas fa-tv text-bistro"></i></div><p class="text-xs">TV</p></div>
+        </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="mx-4 mt-6">
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold">Recent Activity</h3>
+            <span class="text-xs text-bistro cursor-pointer" onclick="toast('View All')">View All</span>
+        </div>
+        <div id="txList" class="space-y-3">
+            <div class="card p-3 rounded-xl flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center"><i class="fas fa-arrow-down text-bistro"></i></div>
+                    <div><p class="font-semibold text-sm">Wallet Topup</p><p class="text-xs text-gray-400">Today 10:30 AM</p></div>
+                </div>
+                <p class="font-bold text-bistro">+₦50,000</p>
+            </div>
+            <div class="card p-3 rounded-xl flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center"><i class="fas fa-arrow-up text-red-500"></i></div>
+                    <div><p class="font-semibold text-sm">Sent to @mike</p><p class="text-xs text-gray-400">Yesterday</p></div>
+                </div>
+                <p class="font-bold text-red-500">-₦5,000</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="fixed bottom-0 left-0 right-0 card border-t border-gray-800">
+        <div class="max-w-[480px] mx-auto grid-cols-4 py-3">
+            <div class="text-center text-bistro cursor-pointer"><i class="fas fa-home text-xl"></i><p class="text-xs">Home</p></div>
+            <div onclick="toast('Rewards')" class="text-center text-gray-500 cursor-pointer"><i class="fas fa-gift text-xl"></i><p class="text-xs">Rewards</p></div>
+            <div onclick="toast('Savings')" class="text-center text-gray-500 cursor-pointer"><i class="fas fa-piggy-bank text-xl"></i><p class="text-xs">Save</p></div>
+            <div onclick="toast('Profile')" class="text-center text-gray-500 cursor-pointer"><i class="fas fa-user text-xl"></i><p class="text-xs">Me</p></div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal" class="fixed inset-0 bg-black/70 hidden items-end justify-center z-50">
+        <div class="card w-full max-w-[480px] rounded-t-2xl p-5">
+            <h3 id="modalTitle" class="font-bold text-lg mb-4"></h3>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+</div>
+
+<script>
+let balance = 1250000;
+function toast(msg){
+    let t=document.getElementById('toast');
+    t.innerText=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2000)
+}
+function openModal(type){
+    let modal=document.getElementById('modal');
+    let title=document.getElementById('modalTitle');
+    let body=document.getElementById('modalBody');
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+
+    if(type=='fund'){
+        title.innerText='Fund Wallet';
+        body.innerHTML=`<input id="amt" type="number" placeholder="Enter amount" class="w-full bg-[#1a1a1a] p-3 rounded-xl mb-3 outline-none">
+        <button onclick="fund()" class="w-full bg-bistro text-black font-bold py-3 rounded-xl">Add Money</button>
+        <button onclick="closeModal()" class="w-full mt-2 text-gray-400">Cancel</button>`
+    }
+    if(type=='send'){
+        title.innerText='Send Money';
+        body.innerHTML=`<input id="user" type="text" placeholder="Bistro Username" class="w-full bg-[#1a1a1a] p-3 rounded-xl mb-3 outline-none">
+        <input id="amt" type="number" placeholder="Amount" class="w-full bg-[#1a1a1a] p-3 rounded-xl mb-3 outline-none">
+        <button onclick="send()" class="w-full bg-bistro text-black font-bold py-3 rounded-xl">Send</button>
+        <button onclick="closeModal()" class="w-full mt-2 text-gray-400">Cancel</button>`
+    }
+    if(type=='withdraw'){
+        title.innerText='Withdraw';
+        body.innerHTML=`<input id="amt" type="number" placeholder="Amount" class="w-full bg-[#1a1a1a] p-3 rounded-xl mb-3 outline-none">
+        <input id="bank" type="text" placeholder="Bank Account" class="w-full bg-[#1a1a1a] p-3 rounded-xl mb-3 outline-none">
+        <button onclick="withdraw()" class="w-full bg-bistro text-black font-bold py-3 rounded-xl">Request</button>
+        <button onclick="closeModal()" class="w-full mt-2 text-gray-400">Cancel</button>`
+    }
+}
+function closeModal(){document.getElementById('modal').classList.add('hidden')}
+function fund(){
+    let amt=parseFloat(document.getElementById('amt').value);
+    if(!amt){toast('Enter amount');return}
+    balance+=amt; updateBalance(); toast(`₦${amt.toLocaleString()} added`);
+    addTx('Wallet Topup',amt,'in'); closeModal();
+}
+function send(){
+    let amt=parseFloat(document.getElementById('amt').value);
+    let user=document.getElementById('user').value;
+    if(balance<amt){toast('Insufficient balance');return}
+    balance-=amt; updateBalance(); toast(`₦${amt.toLocaleString()} sent to ${user}`);
+    addTx('Sent to '+user,amt,'out'); closeModal();
+}
+function withdraw(){
+    let amt=parseFloat(document.getElementById('amt').value);
+    if(balance<amt){toast('Insufficient balance');return}
+    balance-=amt; updateBalance(); toast(`Withdrawal of ₦${amt.toLocaleString()} requested`);
+    addTx('Withdrawal',amt,'out'); closeModal();
+}
+function updateBalance(){document.getElementById('balance').innerText=`₦${balance.toLocaleString()}.00`}
+function addTx(title,amt,type){
+    let list=document.getElementById('txList');
+    let icon=type=='in'?'arrow-down text-bistro':'arrow-up text-red-500';
+    let sign=type=='in'?'+':'-';
+    let color=type=='in'?'text-bistro':'text-red-500';
+    list.innerHTML=`<div class="card p-3 rounded-xl flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center"><i class="fas fa-${icon}"></i></div>
+            <div><p class="font-semibold text-sm">${title}</p><p class="text-xs text-gray-400">Just now</p></div>
+        </div>
+        <p class="font-bold ${color}">${sign}₦${amt.toLocaleString()}</p>
+    </div>`+list.innerHTML;
+}
+</script>
+</body>
+</html>
